@@ -1,9 +1,11 @@
+
+
 <template>
   <canvas ref="canvas" @mousedown="startDraw" @mouseup="endDraw" @mousemove="draw" @wheel="zoom"></canvas>
 </template>
 
 <script setup>
-import { ref, onMounted, } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useWallStore } from '../store';
 
 const canvas = ref(null);
@@ -15,8 +17,8 @@ let offsetY = 0;
 
 onMounted(() => {
   ctx = canvas.value.getContext('2d');
-  canvas.value.width = 500;
-  canvas.value.height = 500;
+  canvas.value.width = canvas.value.clientWidth;
+  canvas.value.height = canvas.value.clientHeight;
   drawAllWalls();
 });
 
@@ -105,5 +107,7 @@ canvas {
   border: 1px solid black;
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
