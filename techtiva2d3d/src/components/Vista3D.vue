@@ -21,21 +21,32 @@
   });
   
   watch(
-    () => store.walls,
-    (newWalls) => {
-      scene.meshes.forEach(mesh => mesh.dispose());
-      newWalls.forEach(wall => {
-        const width = Math.abs(wall.endX - wall.startX) / 50;
-        const height = 2;
-        const depth = 0.2;
-        const positionX = (wall.startX + wall.endX) / 100 - 2.5;
-        const positionZ = (wall.startY + wall.endY) / 100 - 2.5;
-        const wallMesh = BABYLON.MeshBuilder.CreateBox('wall', { width, height, depth }, scene);
-        wallMesh.position.set(positionX, height / 2, positionZ);
-      });
-    },
-    { deep: true }
-  );
+  () => store.walls,
+  (newWalls) => {
+    scene.meshes.forEach(mesh => mesh.dispose());
+    newWalls.forEach(wall => {
+      const startX = wall.startX / 50 - 2.5;
+      const startY = wall.startY / 50 - 2.5;
+      const endX = wall.endX / 50 - 2.5;
+      const endY = wall.endY / 50 - 2.5;
+
+      const width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+      const height = 2;
+      const depth = 0.2;
+
+      const positionX = (startX + endX) / 2;
+      const positionY = (startY + endY) / 2;
+      const positionZ = height / 2;
+
+      const wallMesh = BABYLON.MeshBuilder.CreateBox('wall', { width, height, depth }, scene);
+      wallMesh.position.set(positionX, positionZ, positionY);
+
+      const angle = Math.atan2(endY - startY, endX - startX);
+      wallMesh.rotation.y = -angle;
+    });
+  },
+  { deep: true }
+);
   </script>
   
   <style>

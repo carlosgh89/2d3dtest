@@ -41,12 +41,7 @@ const endDraw = (event) => {
   const { x, y } = getCanvasCoordinates(event);
   const endX = x;
   const endY = y;
-  ctx.strokeStyle = 'black';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(startX, startY);
-  ctx.lineTo(endX, endY);
-  ctx.stroke();
+
 
   store.addWall({ startX, startY, endX, endY });
   drawAllWalls();
@@ -59,12 +54,16 @@ const draw = (event) => {
   const currentY = y;
   ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
   drawAllWalls();
-  ctx.strokeStyle = 'black';
-  ctx.lineWidth = 2;
+  ctx.save();
+  ctx.scale(scale, scale);
+  ctx.translate(offsetX / scale, offsetY / scale);
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(startX, startY);
   ctx.lineTo(currentX, currentY);
   ctx.stroke();
+  ctx.restore();
 };
 
 const drawAllWalls = () => {
