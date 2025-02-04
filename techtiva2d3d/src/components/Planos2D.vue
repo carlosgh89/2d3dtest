@@ -1,5 +1,3 @@
-
-
 <template>
   <canvas ref="canvas" @mousedown="startDraw" @mouseup="endDraw" @mousemove="draw" @wheel="zoom"></canvas>
 </template>
