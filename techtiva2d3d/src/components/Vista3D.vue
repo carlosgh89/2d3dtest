@@ -4,16 +4,18 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { Scene, PerspectiveCamera, WebGLRenderer, HemisphereLight, BoxGeometry, MeshStandardMaterial, Mesh } from 'three';
+import { Scene, PerspectiveCamera, WebGLRenderer, HemisphereLight, BoxGeometry, MeshStandardMaterial, Mesh, Color } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { useWallStore } from '../store';
 
 const canvas3d = ref(null);
 const store = useWallStore();
-let scene, camera, renderer;
+let scene, camera, renderer, controls;
 
 onMounted(() => {
   // Crear la escena
   scene = new Scene();
+  scene.background = new Color(0xeeeeee); // Fondo claro para mejor visibilidad
 
   // Crear la cámara
   camera = new PerspectiveCamera(75, canvas3d.value.clientWidth / canvas3d.value.clientHeight, 0.1, 1000);
@@ -28,9 +30,17 @@ onMounted(() => {
   light.position.set(0, 1, 0);
   scene.add(light);
 
+  // Crear los controles de órbita
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; // Habilitar amortiguación (inercia)
+  controls.dampingFactor = 0.25; // Factor de amortiguación
+  controls.screenSpacePanning = false; // Deshabilitar el desplazamiento en el espacio de la pantalla
+  controls.maxPolarAngle = Math.PI / 2; // Limitar el ángulo polar máximo
+
   // Render loop
   const animate = () => {
     requestAnimationFrame(animate);
+    controls.update(); // Actualizar los controles
     renderer.render(scene, camera);
   };
   animate();
@@ -70,7 +80,7 @@ watch(
       const depth = 0.2;
 
       const geometry = new BoxGeometry(width, height, depth);
-      const material = new MeshStandardMaterial({ color: 0x000000 });
+      const material = new MeshStandardMaterial({ color: 0x8FBC8F });
       const wallMesh = new Mesh(geometry, material);
 
       const positionX = (startX + endX) / 2;

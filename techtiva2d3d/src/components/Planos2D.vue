@@ -1,5 +1,8 @@
 <template>
-  <canvas ref="canvas" @mousedown="startDraw" @mouseup="endDraw" @mousemove="draw" @wheel="zoom"></canvas>
+  <div class="canvas-container">
+    <button class="clear-button" @click="clearLines">🗑️</button>
+    <canvas ref="canvas" @mousedown="startDraw" @mouseup="endDraw" @mousemove="draw" @wheel="zoom"></canvas>
+  </div>
 </template>
 
 <script setup>
@@ -41,7 +44,6 @@ const endDraw = (event) => {
   const { x, y } = getCanvasCoordinates(event);
   const endX = x;
   const endY = y;
-
 
   store.addWall({ startX, startY, endX, endY });
   drawAllWalls();
@@ -97,9 +99,31 @@ const zoom = (event) => {
   ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
   drawAllWalls();
 };
+
+const clearLines = () => {
+  store.walls = [];
+  ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
+};
 </script>
 
 <style scoped>
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.clear-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
 canvas {
   border: 1px solid black;
   margin: 0;
