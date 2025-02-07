@@ -11,6 +11,7 @@
     "@babylonjs/core": "^7.48.0",
     "core-js": "^3.8.3",
     "pinia": "^2.3.1",
+    "three": "^0.173.0",
     "vue": "^3.2.13"
   },
   "devDependencies": {
